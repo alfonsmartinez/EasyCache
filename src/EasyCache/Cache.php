@@ -4,29 +4,57 @@ namespace EasyCache;
 
 use Doctrine\Common\Cache\CacheProvider;
 
-class EasyCache
+class Cache
 {
 
+    /**
+     * @var CacheProvider
+     */
     private $cache;
+    /**
+     * @var int
+     */
     private $lifetime;
+    /**
+     * @var string
+     */
     private $list_name = '_cache_list_control_';
 
+    /**
+     * Cache constructor.
+     * @param CacheProvider $cache
+     * @param int $lifetime
+     */
     public function __construct(CacheProvider $cache, $lifetime = 3600)
     {
         $this->lifetime = $lifetime;
         $this->cache = $cache;
     }
 
+    /**
+     * @param $nombre
+     * @return bool
+     */
     public function issetCache($nombre)
     {
         return $this->cache->contains($nombre);
     }
 
+    /**
+     * @param $nombre
+     * @return mixed
+     */
     public function get($nombre)
     {
         return unserialize($this->cache->fetch($nombre));
     }
 
+    /**
+     * @param $nombre
+     * @param $data
+     * @param bool $lifetime
+     * @return mixed
+     */
     public function set($nombre, $data, $lifetime = false)
     {
         $lifetime = ($lifetime) ? $lifetime : $this->lifetime;
@@ -35,11 +63,17 @@ class EasyCache
         return $this->get($nombre);
     }
 
+    /**
+     * @param $list
+     */
     private function setList($list)
     {
         $this->cache->save($this->list_name, serialize($list), 0);
     }
 
+    /**
+     * @param $nombre
+     */
     public function delete($nombre)
     {
         $list = $this->get($this->list_name);
@@ -51,12 +85,18 @@ class EasyCache
         $this->cache->delete($nombre);
     }
 
+    /**
+     *
+     */
     public function deleteAll()
     {
         $this->setList([]);
         $this->cache->flushAll();
     }
 
+    /**
+     * @param $nombre
+     */
     private function addCacheList($nombre)
     {
         if (!$list = $this->get($this->list_name)) {
@@ -68,6 +108,9 @@ class EasyCache
         $this->setList($list);
     }
 
+    /**
+     * @param $prefix
+     */
     public function deleteByPrefix($prefix)
     {
         if ($list = $this->get($this->list_name)) {
@@ -83,6 +126,9 @@ class EasyCache
         }
     }
 
+    /**
+     * @param $regex
+     */
     public function deleteByRegex($regex)
     {
         if ($list = $this->get($this->list_name)) {
