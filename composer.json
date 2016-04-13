@@ -1,0 +1,28 @@
+{
+  "name": "easycache/easycache",
+  "type": "library",
+  "description": "",
+  "homepage": "https://github.com/alfonsmartinez/EasyCache",
+  "keywords": [
+    "cache"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alfons Martinez",
+      "email": "alfonsmartinezparra@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "EasyCache\\": "src/EasyCache"
+    }
+  },
+  "require": {
+    "php": ">=5.5.0",
+    "doctrine/cache": "^1.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  }
+}
